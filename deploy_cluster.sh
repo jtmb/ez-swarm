@@ -4,7 +4,7 @@
 # VARS
 container_volumes_location=~/container-program-files
 domain_name="mycluster.lan"
-ip_address=$(ip addr show eth0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
+node_ip_address=$(ip addr show eth0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
 
 #Prep Env
 mkdir $container_volumes_location 
@@ -64,12 +64,12 @@ touch "$custom_list_file"
 
 # List of DNS entries
 entries=(
-    "$ip_address $domain_name"
-    "$ip_address whoami.$domain_name"
-    "$ip_address wordpress.$domain_name"
-    "$ip_address proxy.$domain_name"
-    "$ip_address dns.$domain_name"
-    "$ip_address phpmyadmin.$domain_name"
+    "$node_ip_address $domain_name"
+    "$node_ip_address whoami.$domain_name"
+    "$node_ip_address wordpress.$domain_name"
+    "$node_ip_address proxy.$domain_name"
+    "$node_ip_address dns.$domain_name"
+    "$node_ip_address phpmyadmin.$domain_name"
 )
 
 # Add entries to custom.list

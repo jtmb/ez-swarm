@@ -26,13 +26,18 @@
 
 ---  
 ## Prerequisites
+- Debian based Operating system
 - Docker installed on your system
 
 ### Getting Started
-A simple run command gets your instance running.
+A simple run command gets your instance running:
 ```shell
 ./deploy_cluster.sh
+```
 
+or pass in your own variables:
+```shell
+domain_name="mycustomdomain.com" node_ip_address="192.168.0.20" ./deploy_cluster.sh
 ```
 
 ## Environment Variables explained
