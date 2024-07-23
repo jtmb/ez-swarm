@@ -1,0 +1,67 @@
+version: '3.1'
+
+services:
+
+  wordpress:
+    image: wordpress
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.wordpress.rule=Host(`${domain_name}`)"
+        - "traefik.http.services.wordpress.loadbalancer.server.port=80" #uses internal docker port
+        - "traefik.http.routers.wordpress.entrypoints=websecure"
+        - "traefik.http.routers.wordpress.tls=true"
+        - "traefik.http.routers.wordpress.tls.certresolver=myresolver"
+        - "traefik.http.routers.wordpress.tls.domains[0].main=${domain_name}"
+        # to add additional DNS names
+        # - "traefik.http.routers.wordpress.tls.domains[0].sans=${env}.${domain_name}"
+    restart: always
+    ports:
+      - 8085:80
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: db_user
+      WORDPRESS_DB_PASSWORD: 'dR4K?Je"+zBSJQYw2J/Ftd&T'
+      WORDPRESS_DB_NAME: thechroniccoop
+      PUID: 1000
+      PGID: 1000
+    volumes:
+      - ${container_volumes_location}/web-app/wordpress:/var/www/html
+    networks:
+      - container-swarm-network
+      - db-network
+
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: thechroniccoop
+      MYSQL_USER: db_user
+      MYSQL_PASSWORD: 'dR4K?Je"+zBSJQYw2J/Ftd&T'
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+    volumes:
+      - ${container_volumes_location}/web-app/db:/var/lib/mysql
+    networks:
+      - db-network
+      - container-swarm-network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    deploy:
+    links:
+      - db
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    restart: always
+    ports:
+      - 8086:80
+    networks:
+      - db-network
+
+networks:
+  db-network:
+    external: true
+  container-swarm-network:
+    external: true
