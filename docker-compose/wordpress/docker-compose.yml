@@ -14,7 +14,7 @@ services:
         - "traefik.http.routers.wordpress.tls.certresolver=myresolver"
         - "traefik.http.routers.wordpress.tls.domains[0].main=${domain_name}"
         # to add additional DNS names
-        # - "traefik.http.routers.wordpress.tls.domains[0].sans=${env}.${domain_name}"
+        - "traefik.http.routers.wordpress.tls.domains[0].sans=wordpress.${domain_name}"
     restart: always
     ports:
       - 8085:80
@@ -48,6 +48,14 @@ services:
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.phpmyadmin.rule=Host(`phpmyadmin.${domain_name}`)"
+        - "traefik.http.services.phpmyadmin.loadbalancer.server.port=80" #uses internal docker port
+        - "traefik.http.routers.phpmyadmin.entrypoints=websecure"
+        - "traefik.http.routers.phpmyadmin.tls=true"
+        - "traefik.http.routers.phpmyadmin.tls.certresolver=myresolver"
+        - "traefik.http.routers.phpmyadmin.tls.domains[0].main=${domain_name}"
     links:
       - db
     environment:
