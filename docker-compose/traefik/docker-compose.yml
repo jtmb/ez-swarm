@@ -15,13 +15,10 @@ services:
       - --providers.docker.swarmmode=true
       - --providers.docker.network=container-swarm-network
       # to use letsencrypt with external DNS (*like cloudflare for example:)
-      # - "--certificatesresolvers.myresolver.acme.email=myemail@gmail.com"
-      # - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
-      # - "--certificatesResolvers.myresolver.acme.httpChallenge=true"
-      # - "--certificatesResolvers.myresolver.acme.httpChallenge.entrypoint=web"
-      # to use with local self signed certificate
-      - --entrypoints.websecure.http.tls.certResolver=myresolver
-      - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
+      - "--certificatesresolvers.myresolver.acme.email=james.branco@l@gmail.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+      - "--certificatesResolvers.myresolver.acme.httpChallenge=true"
+      - "--certificatesResolvers.myresolver.acme.httpChallenge.entrypoint=web"
       - --api
       - --api.insecure=true
       - --api.dashboard=true
@@ -41,25 +38,20 @@ services:
       - container-swarm-network
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
-      - "traefikp_poc/traefik/letsencrypt:/letsencrypt"
+      - ${container_volumes_location}/traefik/letsencrypt:/letsencrypt
   whoami:
     image: traefik/whoami
     networks:
       - container-swarm-network
     deploy:
       labels:
-        - homepage.group=Proxy
-        - homepage.name=whoami
-        - homepage.icon=https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,c_fill,w_200,h_200/https://api.charmhub.io/api/v1/media/download/charm_9jjrT5C28rJhnK4yaGUEM51nQvWR26YG_icon_72c619c767b59b9147040735ad204012f1f37e79a190054bb64ca8c83c42e0c4.png
-        - homepage.href=http://${master_node}:2001/
-        - homepage.description=Traefik whoami
         - "traefik.enable=true"
-        - "traefik.http.routers.whoami.rule=Host(`${env}-whoami.${domain_name}`)"
+        - "traefik.http.routers.whoami.rule=Host(`whoami.${domain_name}`)"
         - "traefik.http.services.whoami.loadbalancer.server.port=2001" #uses internal docker port
         - "traefik.http.routers.whoami.entrypoints=websecure"
         - "traefik.http.routers.whoami.tls=true"
         - "traefik.http.routers.whoami.tls.certresolver=myresolver"
-        - "traefik.http.routers.whoami.tls.domains[0].main=${env}-whoami.${domain_name}"
+        - "traefik.http.routers.whoami.tls.domains[0].main=whoami.${domain_name}"
         # Add basic auth middleware
         - traefik.http.routers.whoami.middlewares=whoami-auth
         - traefik.http.middlewares.whoami-auth.basicauth.users=brajam:$$apr1$$0z21agij$$ue5mQ35aU.zi.X7J6dRWq.,shakiata:$$apr1$$ncze1lbu$$kDgBmbBEZK/BWely9tSh0/

@@ -1,8 +1,12 @@
 #!/bin/bash
+# This Shell script will INIT a simple one node Swarm Cluster for the TRAEFIK_POC project, with the option to add more nodes.
+# VARS
+container_volumes_location=~/container-program-files
+domain_name="rancherpoc.lan"
 
-env_file="DOMAIN_NAME=rancherpoc.lan"
-
-# This Shell will INIT a simple one node Swarm Cluster for the TRAEFIK_POC project, with the option to add more nodes
+#Prep Env
+mkdir $container_volumes_location 
+chmod 755 $container_volumes_location 
 
 # Init a new swarm with default parameters
 docker swarm init
@@ -18,8 +22,8 @@ swarm_join_command=$(docker swarm join-token manager) >/dev/null 2>&1
 echo $swarm_join_command
 
 # Deploy Stacks
-docker stack deploy -c docker-compose/traefik/docker-compose.yml proxy
-docker stack deploy -c docker-compose/wordpress/docker-compose.yml app
+domain_name=$domain_name container_volumes_location=$container_volumes_location docker stack deploy -c docker-compose/traefik/docker-compose.yml proxy
+domain_name=$domain_name container_volumes_location=$container_volumes_location docker stack deploy -c docker-compose/wordpress/docker-compose.yml app
 
 #Scale Stacks
 docker service scale proxy_traefik=1
