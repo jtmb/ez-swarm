@@ -3,8 +3,8 @@
 
 # VARS
 container_volumes_location=~/container-program-files
-domain_name="traefikpoc.lan"
-ip_address=192.168.0.6
+domain_name="mycluster.lan"
+ip_address=$(ip addr show eth0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
 
 #Prep Env
 mkdir $container_volumes_location 

@@ -15,6 +15,7 @@ services:
       - --providers.docker.swarmmode=true
       - --providers.docker.network=container-swarm-network
       # to use letsencrypt with external DNS (*like cloudflare for example:)
+
       - "--certificatesresolvers.myresolver.acme.email=james.branco@l@gmail.com"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
       - "--certificatesResolvers.myresolver.acme.httpChallenge=true"
