@@ -5,7 +5,7 @@
 </h1>
 
 <div align="center">
-  <b>EZ Swarm</b> - A simple ready to go swarm cluster with built in applications and DNS predeployed/preconfigured.
+  <b>EZ Swarm</b> - A simple ready to go Wordpress cluster with built in traefik reverse proxy + DNS pihole predeployed/preconfigured.
   <br />
   <br />
   <a href="https://github.com/jtmb/ez-swarm/issues/new?assignees=&labels=bug&title=bug%3A+">Report a Bug</a>
