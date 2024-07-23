@@ -8,7 +8,7 @@
   <b>EZ Swarm</b> - A simple ready to go swarm cluster with built in applications and DNS predeployed/preconfigured.
   <br />
   <br />
-  <a href="https://github.com/jtmb/ez_swarm/issues/new?assignees=&labels=bug&title=bug%3A+">Report a Bug</a>
+  <a href="https://github.com/jtmb/ez-swarm/issues/new?assignees=&labels=bug&title=bug%3A+">Report a Bug</a>
 </div>
 <br>
 <details open="open">
