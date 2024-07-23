@@ -23,6 +23,7 @@ docker network create --scope=swarm --attachable -d overlay db-network
 swarm_join_command=$(docker swarm join-token manager) >/dev/null 2>&1
 echo $swarm_join_command
 
+# Source stack locations into a list
 docker_stacks=(
     "docker-compose/traefik/docker-compose.yml proxy"
     "docker-compose/pihole/docker-compose.yml dns"
@@ -52,7 +53,7 @@ for entry in "${services_to_scale[@]}"; do
 done
 
 
-echo "Serives have been scaled."
+echo "Services have been scaled."
 
 # Set DNS
 rm -f $container_volumes_location/pihole/custom.list >/dev/null 2>&1
