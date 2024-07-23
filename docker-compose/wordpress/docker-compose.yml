@@ -22,7 +22,7 @@ services:
       WORDPRESS_DB_HOST: db
       WORDPRESS_DB_USER: db_user
       WORDPRESS_DB_PASSWORD: 'dR4K?Je"+zBSJQYw2J/Ftd&T'
-      WORDPRESS_DB_NAME: thechroniccoop
+      WORDPRESS_DB_NAME: wordpress
       PUID: 1000
       PGID: 1000
     volumes:
@@ -35,7 +35,7 @@ services:
     image: mysql:5.7
     restart: always
     environment:
-      MYSQL_DATABASE: thechroniccoop
+      MYSQL_DATABASE: wordpress
       MYSQL_USER: db_user
       MYSQL_PASSWORD: 'dR4K?Je"+zBSJQYw2J/Ftd&T'
       MYSQL_RANDOM_ROOT_PASSWORD: '1'
