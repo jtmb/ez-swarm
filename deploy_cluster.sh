@@ -45,6 +45,7 @@ services_to_scale=(
     "app_db=1"
     "app_phpmyadmin=1"
     "proxy_traefik=1"
+
 ) 
 
 for entry in "${services_to_scale[@]}"; do
@@ -65,11 +66,11 @@ touch "$custom_list_file"
 # List of DNS entries
 entries=(
     "$node_ip_address $domain_name"
-    "$node_ip_address whoami.$domain_name"
     "$node_ip_address wordpress.$domain_name"
+    "$node_ip_address phpmyadmin.$domain_name"
+    "$node_ip_address whoami.$domain_name"
     "$node_ip_address proxy.$domain_name"
     "$node_ip_address dns.$domain_name"
-    "$node_ip_address phpmyadmin.$domain_name"
 )
 
 # Add entries to custom.list

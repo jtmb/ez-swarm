@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3.8'
 
 services:
   traefik:
@@ -16,12 +16,12 @@ services:
       - --providers.docker.network=container-swarm-network
       # to use letsencrypt with external DNS (*like cloudflare for example:)
 
-      - "--certificatesresolvers.myresolver.acme.email=james.branco@l@gmail.com"
+      - "--certificatesresolvers.myresolver.acme.email=test@gmail.com"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
       - "--certificatesResolvers.myresolver.acme.httpChallenge=true"
       - "--certificatesResolvers.myresolver.acme.httpChallenge.entrypoint=web"
-      - --api
-      - --api.insecure=true
+      # - --api=true
+      # - --api.insecure=false
       - --api.dashboard=true
     ports:
       - target: 80
@@ -33,13 +33,24 @@ services:
         published: 443
         mode: host
         protocol: tcp
-      # additional ports
-      - "81:8080" # Traefik dashboard, optional
+      # # additional ports
+      # - "81:8080" # Traefik dashboard, optional
     networks:
       - container-swarm-network
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - ${container_volumes_location}/traefik/letsencrypt:/letsencrypt
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.dashboard.entrypoints=websecure"
+        - "traefik.http.routers.dashboard.tls=true"
+        - "traefik.http.routers.dashboard.rule=Host(`proxy.${domain_name}`)"
+        - "traefik.http.routers.dashboard.service=api@internal"
+        - "traefik.http.services.dashboard.loadbalancer.server.port=80" #uses internal docker port
+        # Add basic auth middleware
+        - traefik.http.routers.dashboard.middlewares=dashboard-auth
+        - traefik.http.middlewares.dashboard-auth.basicauth.users=brajam:$$apr1$$0z21agij$$ue5mQ35aU.zi.X7J6dRWq.,shakiata:$$apr1$$ncze1lbu$$kDgBmbBEZK/BWely9tSh0/
   whoami:
     image: traefik/whoami
     networks:

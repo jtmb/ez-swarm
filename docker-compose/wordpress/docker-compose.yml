@@ -55,7 +55,7 @@ services:
         - "traefik.http.routers.phpmyadmin.entrypoints=websecure"
         - "traefik.http.routers.phpmyadmin.tls=true"
         - "traefik.http.routers.phpmyadmin.tls.certresolver=myresolver"
-        - "traefik.http.routers.phpmyadmin.tls.domains[0].main=${domain_name}"
+        - "traefik.http.routers.phpmyadmin.tls.domains[0].main=phpmyadmin.${domain_name}"
     links:
       - db
     environment:
@@ -67,6 +67,7 @@ services:
       - 8086:80
     networks:
       - db-network
+      - container-swarm-network
 
 networks:
   db-network:
